@@ -1,0 +1,43 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+def fpi_cos_sq(x0=0.5, tol=0.5e-6, max_iter=1000):
+    g = lambda x: np.cos(x) ** 2
+    x = x0
+    for steps in range(1, max_iter + 1):
+        x_next = g(x)
+        if abs(x_next - x) < tol:
+            return x_next, steps
+        x = x_next
+    return x, max_iter
+
+
+# Calculation
+x0 = 0.5
+root, steps = fpi_cos_sq(x0=x0)
+g_prime = -2 * np.cos(root) * np.sin(root)  # Derivative g'(x) = -sin(2x)
+
+print("--- EXERCISE 5 RESULTS ---")
+print(f"Initial Guess x0: {x0}")
+print(f"Fixed Point r   : {root:.6f}")
+print(f"Number of Steps : {steps}")
+print(f"Derivative g'(r): {g_prime:.6f}")
+print(f"|g'(r)|         : {abs(g_prime):.6f}")
+
+# Plotting
+g = lambda x: np.cos(x) ** 2
+x_vals = np.linspace(0.2, 1.0, 200)
+
+plt.figure(figsize=(6, 5))
+plt.plot(x_vals, g(x_vals), "b-", lw=2, label="$g(x) = \cos^2(x)$")
+plt.plot(x_vals, x_vals, "k--", alpha=0.7, label="$y = x$")
+plt.plot(root, root, "ro", markersize=7, label=f"Fixed Point: {root:.6f}")
+
+plt.title("Exercise 5: Fixed Point of $g(x) = \cos^2(x)$", fontweight="bold")
+plt.xlabel("$x$")
+plt.ylabel("$g(x)$")
+plt.grid(True, ls=":", alpha=0.6)
+plt.legend()
+plt.tight_layout()
+plt.show()
